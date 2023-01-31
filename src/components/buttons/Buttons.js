@@ -5,17 +5,21 @@ import MainForm from "../forms/MainForm";
 import "./styles.css";
 
 function Buttons() {
-  const [modalOpen, setModalOpen] = useState(false);
+
+  const [showForm, setShowForm] = useState(false);
+
+
+ 
   const [title, setTitle] = useState("");
 
 
   const handleShow = (title) => {
-    setModalOpen(true);
+    setShowForm(true);
     setTitle(title);
   };
 
   const handleClose = () => {
-    setModalOpen(false);
+    setShowForm(false);
   };
 
 
@@ -36,7 +40,7 @@ function Buttons() {
       <Button variant="primary" className="buttons-button">
         Imprimir
       </Button>
-      <MainForm modalOpen={modalOpen} handleClose={handleClose} title={title} />
+      <MainForm showForm={showForm} handleClose={handleClose} title="Lixo puro" />
     </div>
   );
 }

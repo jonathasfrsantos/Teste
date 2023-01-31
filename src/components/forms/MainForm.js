@@ -8,21 +8,16 @@ function MainForm(props) {
     nome: "",
     email: "",
     curso: "",
-    modalOpen: false,
-    title: "",
+
   });
 
+  const [showForm, setShowForm] = useState(false);
+  const handleClose = () => setShowForm(false);
 
-
-  const handleOpenModal = () => {
-    setDadosForm({ ...dadosForm, modalOpen: true });
-  };
-
-  const handleClose = () => {
-    setDadosForm({ ...dadosForm, modalOpen: false });
-    clearForm();
-  };
-
+  const handleAtualizar = () => {
+    setDadosForm({...dadosForm})
+  }
+   
   const handleChange = (e) => {
     setDadosForm({ ...dadosForm, [e.target.id]: e.target.value });
   };
@@ -44,18 +39,17 @@ function MainForm(props) {
       await ApiCRUD.create({nome, email, curso});
     }
     clearForm();
-    props.handleClose();
+   
 
   };
 
   return (
     <>
       <Modal
-        show={props.modalOpen}
+        show={props.showForm}
         onHide={props.handleClose}
-        modalOpen={handleOpenModal}
-        onClose={handleClose}
-        title={props.title}
+        title={"Lixo puro"}
+        customprop={handleAtualizar} // proprieda do modal que transmitirá os dados para o formulário
       >
         <Modal.Header closeButton>
           <Modal.Title className="modal-title">

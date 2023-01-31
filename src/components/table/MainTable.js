@@ -4,35 +4,40 @@ import "./styles.css";
 import { ApiCRUD } from "../../services/api/ApiCrud";
 import MainForm from "../forms/MainForm";
 
-
 function MainTable(props) {
-  const [dadosTabela, setDadosTabela] = useState({
+
+  const [dadosForm, setDadosForm] = useState({
     id: 0,
     nome: "",
     email: "",
-    curso: "",
-    modalOpen: false,
-    title: "",
-    dadosForm: ""
-  });
+    curso: ""
+ })
 
   const [alunos, setAlunos] = useState([]);
 
-  const [modalOpen, setModalOpen] = useState(false);
+  const [showForm, setShowForm] = useState(false);
+
+  const [title, setTitle] = useState("");
+
+  const handleShow = (title) => {
+    setShowForm(true);
+    setTitle(title);
+  };
+
 
   const handleClose = () => {
-        setModalOpen(false);
-  }
+    setShowForm(false);
+  };
 
   
 
 
 
   const handleAtualizar = async(id) => {
-    const dadosTabela = await ApiCRUD.getByDisplayValue(id);
-    setDadosTabela(dadosTabela);
-    setModalOpen(true);
-    console.log(dadosTabela);
+    const dadosForm = await ApiCRUD.getByDisplayValue(id);
+    setDadosForm(dadosForm);
+    setShowForm(true);
+    console.log(dadosForm);
   };
 
   const handleExcluir = (id) => {
@@ -50,11 +55,15 @@ function MainTable(props) {
     ApiCRUD.getAll()
         .then((response) => {
             setAlunos(response);
-        });
-  })
+        })
+        .catch(() => {
+          setAlunos([]);
+        })
+  }, [])
 
   return (
     <>
+     {alunos.length === 0 ? (<div> Não foi possível conectar ao banco de dados </div>) : (
       <Table className="MainTable" hover>
         <thead>
           <tr>
@@ -85,12 +94,15 @@ function MainTable(props) {
               </td>
             </tr>
           ))}
-        <MainForm modalOpen={modalOpen} dadosForm={dadosTabela} handleClose={handleClose} />
+        <MainForm showForm={showForm}  customprops={dadosForm} handleClose={handleClose} title={title} />
 
         </tbody>
       </Table>
+     )}
+
     </>
-  );
-}
+
+  )};
+     
 
 export default MainTable;
