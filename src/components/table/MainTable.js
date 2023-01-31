@@ -11,7 +11,7 @@ function MainTable(props) {
     nome: "",
     email: "",
     curso: ""
- })
+  });
 
   const [alunos, setAlunos] = useState([]);
 
@@ -28,9 +28,6 @@ function MainTable(props) {
   const handleClose = () => {
     setShowForm(false);
   };
-
-  
-
 
 
   const handleAtualizar = async(id) => {
@@ -94,7 +91,7 @@ function MainTable(props) {
               </td>
             </tr>
           ))}
-        <MainForm showForm={showForm}  customprops={dadosForm} handleClose={handleClose} title={title} />
+        <MainForm showForm={showForm}  dadosform={dadosForm} handleClose={handleClose} title={title} />
 
         </tbody>
       </Table>

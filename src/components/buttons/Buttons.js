@@ -1,17 +1,12 @@
 import React, { useState } from "react";
 import { Button } from "react-bootstrap";
 import MainForm from "../forms/MainForm";
-
 import "./styles.css";
 
 function Buttons() {
 
   const [showForm, setShowForm] = useState(false);
-
-
- 
   const [title, setTitle] = useState("");
-
 
   const handleShow = (title) => {
     setShowForm(true);
@@ -21,8 +16,6 @@ function Buttons() {
   const handleClose = () => {
     setShowForm(false);
   };
-
-
 
   return (
     <div className="buttons-container">

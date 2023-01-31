@@ -12,10 +12,11 @@ function MainForm(props) {
   });
 
   const [showForm, setShowForm] = useState(false);
+
   const handleClose = () => setShowForm(false);
 
-  const handleAtualizar = () => {
-    setDadosForm({...dadosForm})
+  const handleAtualizar = (id, nome, email, curso) => {
+    setDadosForm({...dadosForm, nome, email, curso })
   }
    
   const handleChange = (e) => {
@@ -49,7 +50,7 @@ function MainForm(props) {
         show={props.showForm}
         onHide={props.handleClose}
         title={"Lixo puro"}
-        customprop={handleAtualizar} // proprieda do modal que transmitirá os dados para o formulário
+        dadosform={handleAtualizar} // propriedade do modal que será transmitida no componente "MainTable"
       >
         <Modal.Header closeButton>
           <Modal.Title className="modal-title">
