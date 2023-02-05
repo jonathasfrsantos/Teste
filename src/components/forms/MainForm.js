@@ -1,121 +1,69 @@
+import axios from "axios";
 import { useState } from "react";
-import { Button, Form, Modal } from "react-bootstrap";
-import { ApiCRUD} from "../../services/api/ApiCrud";
+import { Button, Form } from "react-bootstrap";
 
-function MainForm(props) {
-  const [dadosForm, setDadosForm] = useState({
-    id: 0,
-    nome: "",
-    email: "",
-    curso: "",
-
+function MainForm({ data, close, updateData }) {
+  const [formData, setFormData] = useState({
+    id: data.id,
+    nome: data.nome,
+    email: data.email,
+    curso: data.curso,
   });
 
-  const [showForm, setShowForm] = useState(false);
-
-  const handleClose = () => setShowForm(false);
-
-  const handleAtualizar = (id, nome, email, curso) => {
-    setDadosForm({...dadosForm, nome, email, curso })
-  }
-   
-  const handleChange = (e) => {
-    setDadosForm({ ...dadosForm, [e.target.id]: e.target.value });
-  };
-
-  const clearForm = () => {
-    setDadosForm({
-      nome: "",
-      email: "",
-      curso: "",
-    });
-  };
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const {id, nome, email, curso} = dadosForm;
-    if (id) {
-      await ApiCRUD.update({id, nome, email, curso});
-    } else {
-      await ApiCRUD.create({nome, email, curso});
-    }
-    clearForm();
-   
 
+    axios
+      .put(`http://localhost:8080/alunos/${data.id}`, formData)
+      .then((response) => {
+        updateData((prevData) =>
+          prevData.map((data) => (data.id === formData.id ? formData : data))
+        );
+        close();
+      });
   };
 
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  
   return (
-    <>
-      <Modal
-        show={props.showForm}
-        onHide={props.handleClose}
-        title={"Lixo puro"}
-        dadosform={handleAtualizar} // propriedade do modal que será transmitida no componente "MainTable"
-      >
-        <Modal.Header closeButton>
-          <Modal.Title className="modal-title">
-            {dadosForm.id ? "Editar aluno": "Adicionar aluno"}
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form onSubmit={handleSubmit}>
-            <Form.Group className="form-group" >
-              <Form.Label className="label-style"> Nome </Form.Label>
-              <Form.Control
-                className="form-input"
-                type="text"
-                placeholder="Nome do aluno"
-                value={dadosForm.nome}
-                onChange={handleChange}
-                id="nome"
-             
-              />
-            </Form.Group>
-          </Form>
-
-          <Form>
-            <Form.Group className="form-group" >
-              <Form.Label className="label-style"> Email </Form.Label>
-              <Form.Control
-                className="form-input"
-                type="email"
-                placeholder="email@email.com"
-                value={dadosForm.email}
-                onChange={handleChange}
-                id="email"
-               
-              />
-            </Form.Group>
-          </Form>
-
-          <Form>
-            <Form.Group className="form-group" >
-              <Form.Label className="label-style"> Curso </Form.Label>
-              <Form.Control
-                className="form-input"
-                type="text"
-                placeholder=""
-                value={dadosForm.curso}
-                onChange={handleChange}
-                id="curso"
-               
-              />
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="primary" onClick={handleSubmit}>
-            {" "}
-            Salvar
-          </Button>
-          <Button variant="danger" onClick={handleClose}>
-            {" "}
-            Fechar
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </>
+    <Form onSubmit={handleSubmit}>
+      <Form.Group>
+        <Form.Label>Nome</Form.Label>
+        <Form.Control
+          type="text"
+          name="nome"
+          value={formData.nome}
+          onChange={handleChange}
+        />
+      </Form.Group>
+      <Form.Group>
+        <Form.Label>E-mail</Form.Label>
+        <Form.Control
+          type="email"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+        />
+      </Form.Group>
+      <Form.Group>
+        <Form.Label>Curso</Form.Label>
+        <Form.Control
+          type="text"
+          name="curso"
+          value={formData.curso}
+          onChange={handleChange}
+        />
+      </Form.Group>
+      <Button variant="primary" type="submit">
+        Salvar
+      </Button>
+    </Form>
   );
+
+
 }
 
 export default MainForm;
